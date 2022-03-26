@@ -11,6 +11,7 @@ import Login from "./Auth/Login";
 import Settings from "./Misc/Settings";
 import { grey } from "@mui/material/colors";
 import Navbar from "./Navbar/Navbar";
+import Signup from "./Auth/SignUp";
 
 const MainComponent = () => {
   const [mode] = useContext(ThemeChangeContext);
@@ -66,6 +67,7 @@ const MainComponent = () => {
         <Route path="/profile/:id" element={<Profile />} />
         <Route path="/auth" element={<Auth />} />
         <Route path="/auth/signin" element={<Login />} />
+        <Route path="/auth/signup" element={<Signup />} />
       </Routes>
     </ThemeProvider>
   );
