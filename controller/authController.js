@@ -31,33 +31,38 @@ const comparePassword = async (password, hash) => {
 //------------------------------------------------Middleware for authorization and authentication checks---------------------------------------------
 
 exports.isAuthenticated = async (req, res, next) => {
-  const token = req.cookies.access;
-  const refreshToken = req.cookies.refresh;
-  if (!token && !refreshToken) {
-    // res.status(403).json({ error: "Unverified user" });
-    errorHander.handleUnauthorized(res);
-    return;
-  }
-  let user = JWT.verifyToken(token);
-  if (!user) {
-    const access = await JWT.regenerateAccessToken(refreshToken);
-    if (!access) {
-      // res.status(403).json({ error: "Invalid Token" });
+  try {
+    const token = req.cookies.access;
+    const refreshToken = req.cookies.refresh;
+    if (!token && !refreshToken) {
+      // res.status(403).json({ error: "Unverified user" });
       errorHander.handleUnauthorized(res);
       return;
     }
-    user = JWT.verifyToken(access);
-    res.cookie("access", access, {
-      httpOnly: true,
-      maxAge: JWT.accessExpiry * 1000,
-    });
-    res.cookie("user", JSON.stringify(user), {
-      httpOnly: false,
-      maxAge: JWT.accessExpiry * 1000,
-    });
+    let user = JWT.verifyToken(token);
+    if (!user) {
+      const access = await JWT.regenerateAccessToken(refreshToken);
+      if (!access) {
+        // res.status(403).json({ error: "Invalid Token" });
+        errorHander.handleUnauthorized(res);
+        return;
+      }
+      user = JWT.verifyToken(access);
+      res.cookie("access", access, {
+        httpOnly: true,
+        maxAge: JWT.accessExpiry * 1000,
+      });
+      res.cookie("user", JSON.stringify(user), {
+        httpOnly: false,
+        maxAge: JWT.accessExpiry * 1000,
+      });
+    }
+    req.user = await User.findById(user._id).select("-password");
+    // req.user = user;
+    next();
+  } catch (e) {
+    errorHander.handleInternalServer(res);
   }
-  req.user = user._doc;
-  next();
 };
 
 // --------------------------------------------------------End of Middleware----------------------------------------------------------
