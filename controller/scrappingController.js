@@ -45,12 +45,17 @@ exports.cf_scrapping = async (req, res) => {
     const $ = cheerio.load(dom);
 
     const content = $(".userbox .info").children()
-    console.log($.root().html())
+    // console.log($.root().html())
+    // res.json({
+    //     "heml": $.root().html()
+    // })
     // code chef rating
-    content.find("ul").each((i, ele) => {
-        console.log($(ele).text())
+    // content.find("ul").each((i, ele) => {
+    //     console.log($(ele).text())
+    // })
+    content.find("li").each((i, ele) => {
+        console.log($(ele).find(".user-legendary").text())
     })
-    console.log(content.find("ul").html())
     // console.log(content.find(".rating-number").text());
     // stars 
     // console.log(content.find(".rating-star").text().length);
