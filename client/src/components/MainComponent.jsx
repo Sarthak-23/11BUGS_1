@@ -17,23 +17,36 @@ const MainComponent = () => {
   const [mode] = useContext(ThemeChangeContext);
   const [user, setUser] = useContext(UserContext);
   const navigate = useNavigate();
-  useEffect(() => {
-    const fetchUser = async () => {
+  const fetchUser = async () => {
+    try {
       let res = await fetch("/auth/user");
+      let status = res.status;
       res = await res.json();
-      return res;
-    };
-    fetchUser().then((res) => {
-      if (!res.error) {
-        setUser(() => {
-          return {
-            ...res,
-            id: res.id,
-          };
-        });
-        navigate("/app");
+      if (status === 200) {
+        return res;
       }
-    });
+      throw Error(res.message);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    fetchUser()
+      .then((res) => {
+        if (!res.status) {
+          setUser(() => {
+            return {
+              ...res,
+              id: res.id,
+            };
+          });
+          console.log("Logged in");
+          navigate("/");
+        }
+      })
+      .catch((error) => {
+        console.log("Error");
+      });
   }, []);
 
   //   Theme

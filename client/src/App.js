@@ -9,7 +9,7 @@ import { UserProvider } from "./contexts/UserContext";
 function App() {
   return (
     <ThemeChangeProvider>
-      <BrowserRouter basename="/app">
+      <BrowserRouter>
         <UserProvider>
           <MainComponent />
         </UserProvider>
