@@ -18,6 +18,9 @@ const useStyle = makeStyles((theme) => ({
     width: "100%",
     padding: "20px",
     boxSizing: "border-box",
+    border: `1px solid ${theme.palette.divider}`,
+    borderRadius: "4px",
+    boxShadow: "2px 2px 5px #00000016",
   },
   rank: {
     display: "flex",
@@ -26,6 +29,8 @@ const useStyle = makeStyles((theme) => ({
     flexFlow: "column",
     color: "#222222",
 
+    border: `1px solid ${theme.palette.divider}`,
+    boxSizing: "border-box",
   },
 }));
 
@@ -38,14 +43,21 @@ const CFCard = (props) => {
         gutterBottom
         variant="h4"
         component="div"
+        sx={{ marginBottom: "0" }}
         color="text.primary"
       >
         2600
       </Typography>
+      <Typography
+        variant="caption"
+        sx={{ fontWeight: "700" }}
+        color="text.secondary"
+      >
+        Legendary Grandmaster
+      </Typography>
       <Typography variant="h6" color="text.secondary">
         3000
       </Typography>
-
       <Typography variant="caption" color="text.secondary">
         Highest rating
       </Typography>
@@ -68,7 +80,7 @@ const CFCard = (props) => {
             2
           </Typography>
           <Typography
-            sx={{ textAlign: "center" }}
+            sx={{ textAlign: "center", fontSize: "8px" }}
             variant="caption"
             color="text.secondary"
           >
@@ -84,7 +96,7 @@ const CFCard = (props) => {
             2
           </Typography>
           <Typography
-            sx={{ textAlign: "center" }}
+            sx={{ textAlign: "center", fontSize: "8px" }}
             variant="caption"
             color="text.secondary"
           >
@@ -111,7 +123,7 @@ const CFCard = (props) => {
             100
           </Typography>
           <Typography
-            sx={{ textAlign: "center" }}
+            sx={{ textAlign: "center", fontSize: "8px" }}
             variant="caption"
             color="text.secondary"
           >
@@ -127,7 +139,7 @@ const CFCard = (props) => {
             200
           </Typography>
           <Typography
-            sx={{ textAlign: "center" }}
+            sx={{ textAlign: "center", fontSize: "8px" }}
             variant="caption"
             color="text.secondary"
           >
@@ -143,7 +155,7 @@ const CFCard = (props) => {
             200
           </Typography>
           <Typography
-            sx={{ textAlign: "center" }}
+            sx={{ textAlign: "center", fontSize: "8px" }}
             variant="caption"
             color="text.secondary"
           >

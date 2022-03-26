@@ -12,23 +12,34 @@ import Button from "@mui/material/Button";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import Card from "@mui/material/Card";
+import { IconButton } from "@mui/material";
 
 //icons
 import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
 import ArrowCircleDownIcon from "@mui/icons-material/ArrowCircleDown";
+import ShareIcon from "@mui/icons-material/Share";
 
 const useStyles = makeStyles((theme) => ({
   Header: {
     display: "flex",
+    marginBottom: "5px",
   },
   card: {
     padding: "10px",
-    border: "1px solid grey",
+    // border: "1px solid grey",
   },
   profile: {
-    width: "120px",
-    height: "120px",
-    boxShadow: "0 0 5px #eee",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  Avatar: {
+    width: "100px",
+    height: "100px",
+    [theme.breakpoints.down("sm")]: {
+      width: "70px",
+      height: "70px",
+    },
   },
 
   UserSummary: {},
@@ -68,16 +79,18 @@ const UCTop = (props) => {
     // <Card className={classes.Header}>
     <Grid container item className={classes.Header}>
       {/* top left */}
-      <Grid item container xs={12} sm={3} >
+      <Grid item container xs={4} sm={3} className={classes.profile}>
         {/* avator left */}
-          <Avatar
-            alt="Remy Sharp"
-            src="/static/images/avatar/1.jpg"
-            className={classes.profile}
-              />
+        <Avatar
+          alt="Remy Sharp"
+          src="/static/images/avatar/1.jpg"
+          className={classes.Avatar}
+            sx={{ boxShadow: "0 0 12px #fff" }}
+                  
+        />
         {/* top left right */}
       </Grid>
-      <Grid item container xs={12} sm={5} >
+      <Grid item container xs={8} sm={5}>
         <CardContent className={classes.UserSummary}>
           <Typography
             gutterBottom
@@ -90,10 +103,12 @@ const UCTop = (props) => {
           <Typography variant="body2" color="text.secondary">
             991
           </Typography>
-          <Button size="small">Share</Button>
+          <IconButton size="small">
+            <ShareIcon color="primary"/>
+          </IconButton>
         </CardContent>
       </Grid>
-          <Grid item container xs={12} sm={4}className={classes.vote}>
+      <Grid item container xs={12} sm={4} className={classes.vote}>
         <ToggleButtonGroup
           orientation="vertical"
           value={view}

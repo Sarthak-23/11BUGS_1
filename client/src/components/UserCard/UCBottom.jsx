@@ -14,17 +14,15 @@ const useStyle = makeStyles((theme) => ({
   cpBox: {
     display: "flex",
     justifyContent: "center",
-    border: "1px solid #D1D1D1",
-    borderRadius: "4px",
-    boxShadow: "2px 2px 5px #00000016",    
+    padding: "4px",
   },
 }));
 
 const UCBottom = (props) => {
   const classes = useStyle();
 
-    return (
-        <Grid item container xs={12}>
+  return (
+    <Grid item container xs={12}>
       <Grid item container xs={12} md={4} className={classes.cpBox}>
         <CCCard />
       </Grid>
