@@ -21,6 +21,7 @@ router.post(
       if (!user) return errorHander.handleNotFound(res, "User Not Found!");
       const update = await User.findOneAndUpdate(
         { username: username },
+        { $pull: { review: { user: req.user._id } } },
         { $push: { review: { user: req.user._id, value: 1 } } }
       );
       res.status(200).json({ message: "Upvoted!" });
@@ -41,6 +42,7 @@ router.post(
       if (!user) return errorHander.handleNotFound(res, "User Not Found!");
       const update = await User.findOneAndUpdate(
         { username: username },
+        { $pull: { review: { user: req.user._id } } },
         { $push: { review: { user: req.user._id, value: -1 } } }
       );
       res.status(200).json({ message: "Downvoted!" });
