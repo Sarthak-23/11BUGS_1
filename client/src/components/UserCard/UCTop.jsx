@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 import { styled } from "@mui/material/styles";
 
 import Grid from "@mui/material/Grid";
@@ -11,7 +11,7 @@ import CardActions from "@mui/material/CardActions";
 import Button from "@mui/material/Button";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
-
+import Card from "@mui/material/Card";
 
 //icons
 import ArrowCircleUpIcon from "@mui/icons-material/ArrowCircleUp";
@@ -19,12 +19,11 @@ import ArrowCircleDownIcon from "@mui/icons-material/ArrowCircleDown";
 
 const useStyles = makeStyles((theme) => ({
   Header: {
-    height: "20%"
+    display: "flex",
   },
   card: {
     padding: "10px",
     border: "1px solid grey",
-    width: "70%",
   },
   profile: {
     width: "120px",
@@ -41,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
   },
   VoteButton: {
     display: "flex",
-      justifyContent: "space-around",
+    justifyContent: "space-around",
     fontSize: "10px",
   },
   VoteUp: {
@@ -57,49 +56,44 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const UCTop = (props) => {
-    const classes = useStyles();
-    const [view, setView] = React.useState("list");
+  const classes = useStyles();
+  const [view, setView] = React.useState("list");
 
-    const handleChange = (e) => {
+  const handleChange = (e) => {
     console.log(e.target, e);
     setView(e);
-    };
+  };
 
   return (
-    <Grid item container xs={12} className={classes.Header}>
+    // <Card className={classes.Header}>
+    <Grid container item className={classes.Header}>
       {/* top left */}
-      <Grid item container xs={9}>
+      <Grid item container xs={12} sm={3} >
         {/* avator left */}
-        <Grid item container xs={3} sx={{display: "flex", justifyContent: "center", alignItems: "center"}}>
           <Avatar
             alt="Remy Sharp"
             src="/static/images/avatar/1.jpg"
             className={classes.profile}
-          />
-        </Grid>
+              />
         {/* top left right */}
-        {/* <Grid item container xs={9}>
-          <CardContent className={classes.UserSummary}>
-            <Typography
-              gutterBottom
-              variant="h5"
-              component="div"
-              color="text.primary"
-            >
-              352
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Lizards are a widespread group of squamate reptiles, with over
-              6,000 species, ranging across all continents except Antarctica
-            </Typography>
-          </CardContent>
-          <CardActions>
-            <Button size="small">Share</Button>
-            <Button size="small">Learn More</Button>
-          </CardActions>
-        </Grid> */}
       </Grid>
-      <Grid item container xs={3} className={classes.vote}>
+      <Grid item container xs={12} sm={5} >
+        <CardContent className={classes.UserSummary}>
+          <Typography
+            gutterBottom
+            variant="h5"
+            component="div"
+            color="text.primary"
+          >
+            Name
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            991
+          </Typography>
+          <Button size="small">Share</Button>
+        </CardContent>
+      </Grid>
+          <Grid item container xs={12} sm={4}className={classes.vote}>
         <ToggleButtonGroup
           orientation="vertical"
           value={view}
@@ -109,19 +103,20 @@ const UCTop = (props) => {
         >
           <ToggleButton className={[classes.VoteButton, classes.VoteUp]}>
             <ArrowCircleUpIcon sx={{ color: "#39C98A" }} />
-            1241
           </ToggleButton>
-                  <ToggleButton sx={{padding: "1px"}} className={[classes.VoteButton]}>
+          <ToggleButton
+            sx={{ padding: "1px" }}
+            className={[classes.VoteButton]}
+          >
             up vote or down vote this developer
           </ToggleButton>
           <ToggleButton className={[classes.VoteButton, classes.VoteDown]}>
             <ArrowCircleDownIcon sx={{ color: "#C93947" }} />
-            1241
           </ToggleButton>
         </ToggleButtonGroup>
       </Grid>
     </Grid>
   );
-}
+};
 
-export default UCTop
+export default UCTop;

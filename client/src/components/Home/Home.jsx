@@ -5,8 +5,6 @@ const HomeStyle = {
   display: "flex",
   justifyContent: "center",
   alignItem: "center",
-  height: "90vh",
-
 }
 
 const Home = () => {
