@@ -82,7 +82,7 @@ router.post("/leaderboard/global", async (req, res) => {
         $project: {
           karma: 1,
           rank: 1,
-          name: 1,
+          username: 1,
         },
       },
     ]);
@@ -115,7 +115,7 @@ router.post(
           $project: {
             karma: 1,
             rank: 1,
-            name: 1,
+            username: 1,
           },
         },
       ]);
