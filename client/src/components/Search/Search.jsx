@@ -94,49 +94,56 @@ const Search = () => {
         </Typography>
       ) : search ? (
         <>
-          <Stats handle={query} code={"Github"} userID={null} scoreSize={128} />
+          <Stats
+            handle={query}
+            code={"Github"}
+            // userID={null}
+            scoreSize={128}
+          />
           <Stats
             handle={query}
             code={"Codechef"}
-            userID={null}
+            // userID={null}
             scoreSize={128}
           />
           <Stats
             handle={query}
             code={"Codeforces"}
-            userID={null}
+            // userID={null}
             scoreSize={128}
           />
-          <Card sx={{ mb: 2 }}>
-            <CardContent>
-              <Link
-                href={`/profile/${data._id}`}
-                sx={{
-                  textDecoration: "none",
-                  // color: theme.palette.text.primary,
-                }}
-              >
-                <ListItemButton>
-                  <Grid container>
-                    <Grid item>
-                      <Avatar src={data.avatar} />
+          {data && data._id && (
+            <Card sx={{ mb: 2 }}>
+              <CardContent>
+                <Link
+                  href={`/profile/${data._id}`}
+                  sx={{
+                    textDecoration: "none",
+                    // color: theme.palette.text.primary,
+                  }}
+                >
+                  <ListItemButton>
+                    <Grid container>
+                      <Grid item>
+                        <Avatar src={data.avatar} />
+                      </Grid>
+                      <Grid item xs={true} sx={{ pl: 2 }}>
+                        <Box>
+                          <Typography variant="h6">{data.name}</Typography>
+                          <Typography variant="caption">
+                            {data.username}
+                          </Typography>
+                        </Box>
+                      </Grid>
+                      <Grid item>
+                        <ScoreCard value={data.karma} size={48} />
+                      </Grid>
                     </Grid>
-                    <Grid item xs={true} sx={{ pl: 2 }}>
-                      <Box>
-                        <Typography variant="h6">{data.name}</Typography>
-                        <Typography variant="caption">
-                          {data.username}
-                        </Typography>
-                      </Box>
-                    </Grid>
-                    <Grid item>
-                      <ScoreCard value={data.karma} size={48} />
-                    </Grid>
-                  </Grid>
-                </ListItemButton>
-              </Link>
-            </CardContent>
-          </Card>
+                  </ListItemButton>
+                </Link>
+              </CardContent>
+            </Card>
+          )}
         </>
       ) : (
         <Typography color={theme.palette.warning.main} align="center">
