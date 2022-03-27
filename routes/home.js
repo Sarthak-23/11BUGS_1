@@ -65,7 +65,7 @@ router.get("/recommend/no-auth", async (req, res) => {
 });
 
 //Return the leaderboard
-router.get("/leaderboard/global", async (req, res) => {
+router.post("/leaderboard/global", async (req, res) => {
   try {
     const temp = User.aggregate([
       {
@@ -78,6 +78,13 @@ router.get("/leaderboard/global", async (req, res) => {
           },
         },
       },
+      {
+        $project: {
+          karma: 1,
+          rank: 1,
+          name: 1,
+        },
+      },
     ]);
     let result = await temp.exec();
     res.status(200).json({ result });
@@ -88,7 +95,7 @@ router.get("/leaderboard/global", async (req, res) => {
 });
 
 // Return the leaderboard of friends
-router.get(
+router.post(
   "/leaderboard/friends",
   authController.isAuthenticated,
   async (req, res) => {

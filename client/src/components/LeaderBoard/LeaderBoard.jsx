@@ -1,68 +1,103 @@
-import * as React from "react";
-import { styled } from "@mui/material/styles";
+import React, { useEffect, useState } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
-import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import { makeStyles } from "@mui/styles";
+import {
+  Avatar,
+  Grid,
+  Typography,
+  Divider,
+  useTheme,
+  Link,
+} from "@mui/material";
+import axios from "axios";
+import Err from "../Misc/Err";
 
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.black,
-    color: theme.palette.common.white,
+const useStyles = makeStyles((theme) => ({
+  tableContainer: {
+    borderRadius: 15,
+    margin: "50px 0",
   },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
+  tableHeaderCell: {
+    fontWeight: "bold",
+    backgroundColor: theme.palette.primary.dark,
+    color: theme.palette.getContrastText(theme.palette.primary.dark),
+  },
+  avatar: {
+    backgroundColor: theme.palette.primary.light,
+    color: theme.palette.getContrastText(theme.palette.primary.light),
+  },
+  name: {
+    fontWeight: "bold",
+    cursor: "pointer",
   },
 }));
 
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  "&:nth-of-type(odd)": {
-    backgroundColor: theme.palette.action.hover,
-  },
-  // hide last border
-  "&:last-child td, &:last-child th": {
-    border: 0,
-  },
-}));
-
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-  createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-  createData("Eclair", 262, 16.0, 24, 6.0),
-  createData("Cupcake", 305, 3.7, 67, 4.3),
-  createData("Gingerbread", 356, 16.0, 49, 3.9),
-];
 const LeaderBoard = () => {
+  const classes = useStyles();
+  const [data, setData] = useState([]);
+  const [error, setError] = useState("");
+  const theme = useTheme();
+  useEffect(async () => {
+    try {
+      const res = await axios.post("/leaderboard/global");
+      console.log(res.data.result);
+      setData(res.data.result);
+    } catch (e) {
+      setError(e.message);
+      console.log(e);
+    }
+  }, []);
+  if (error) return <Err error={error} />;
   return (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 700 }} aria-label="customized table">
+    <TableContainer component={Paper} className={classes.tableContainer}>
+      <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
-            <StyledTableCell>Dessert (100g serving)</StyledTableCell>
-            <StyledTableCell align="right">Calories</StyledTableCell>
-            <StyledTableCell align="right">Fat&nbsp;(g)</StyledTableCell>
-            <StyledTableCell align="right">Carbs&nbsp;(g)</StyledTableCell>
-            <StyledTableCell align="right">Protein&nbsp;(g)</StyledTableCell>
+            <TableCell className={classes.tableHeaderCell}>Rank</TableCell>
+            <TableCell className={classes.tableHeaderCell}>Name</TableCell>
+            <TableCell className={classes.tableHeaderCell}>Score</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
-            <StyledTableRow key={row.name}>
-              <StyledTableCell component="th" scope="row">
-                {row.name}
-              </StyledTableCell>
-              <StyledTableCell align="right">{row.calories}</StyledTableCell>
-              <StyledTableCell align="right">{row.fat}</StyledTableCell>
-              <StyledTableCell align="right">{row.carbs}</StyledTableCell>
-              <StyledTableCell align="right">{row.protein}</StyledTableCell>
-            </StyledTableRow>
+          {data.map((row, i) => (
+            <>
+              <TableRow
+                key={i}
+                sx={{
+                  "&:last-child td, &:last-child th": {
+                    border: 0,
+                  },
+                }}
+              >
+                <TableCell
+                  sx={{ borderBottom: `1px solid ${theme.palette.divider}` }}
+                >
+                  <Grid container>
+                    <Typography>{row.rank}</Typography>
+                  </Grid>
+                </TableCell>
+                <TableCell
+                  sx={{ borderBottom: `1px solid ${theme.palette.divider}` }}
+                >
+                  <Link href={`/profile/${row._id}`}>
+                    <Typography className={classes.name}>{row.name}</Typography>
+                  </Link>
+                </TableCell>
+                <TableCell
+                  sx={{ borderBottom: `1px solid ${theme.palette.divider}` }}
+                >
+                  <Typography>
+                    {Math.round((row.karma + Number.EPSILON) * 100) / 100}
+                  </Typography>
+                </TableCell>
+              </TableRow>
+            </>
           ))}
         </TableBody>
       </Table>
