@@ -21,6 +21,8 @@ router.get("/:id", async (req, res) => {
 router.post("/:id/upvote", authController.isAuthenticated, async (req, res) => {
   try {
     const id = req.params.id;
+    if (req.user._id.equals(id)) return errorHander.handleBadRequest(res);
+
     const user = await User.findById(id);
     if (!user) return errorHander.handleNotFound(res, "User Not Found!");
     await User.findByIdAndUpdate(id, {
@@ -42,6 +44,8 @@ router.post(
   async (req, res) => {
     try {
       const id = req.params.id;
+      if (req.user._id.equals(id)) return errorHander.handleBadRequest(res);
+
       const user = await User.findById(id);
       if (!user) return errorHander.handleNotFound(res, "User Not Found!");
       await User.findByIdAndUpdate(id, {
