@@ -109,22 +109,19 @@ const UCTop = (props) => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
-
   const handleAlignment = (event, newVote) => {
-    console.log(newVote, vote)
+    console.log(newVote, vote);
     postVote(newVote)
-      .then((res) => { 
-          if (vote === '') {
-            setVote(newVote)
-          }
-          else {
-            if(vote !== newVote)  
-              setVote(newVote);
-          }
+      .then((res) => {
+        if (vote === "") {
+          setVote(newVote);
+        } else {
+          if (vote !== newVote) setVote(newVote);
+        }
       })
       .catch((e) => {
         console.log(e);
-        setError(e.message || "Something went wrong!")
+        setError(e.message || "Something went wrong!");
       });
   };
 
