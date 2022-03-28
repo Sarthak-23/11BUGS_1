@@ -11,6 +11,7 @@ router.patch("/", authController.isAuthenticated, async (req, res) => {
       name: req.body.name || req.user.name,
       email: req.body.email || req.user.email,
       resume: req.body.resume || req.user.resume,
+      avatar: req.body.avatar || req.user.avatar,
     });
     res.status(200).json({ message: "Updated!" });
   } catch (error) {

@@ -9,15 +9,21 @@ router.post("/recommend/no-auth", async (req, res) => {
     const docsPerPage = 1;
 
     // Sort the users by their peer reviews
-    const pipe = User.aggregate([
-      { $unwind: { path: "$review", preserveNullAndEmptyArrays: true } },
+    const pipe = User.aggregate([{
+        $unwind: {
+          path: "$review",
+          preserveNullAndEmptyArrays: true
+        }
+      },
       {
         $group: {
           _id: "$_id",
           count: {
             $sum: {
               $cond: {
-                if: { $eq: ["$review.value", 1] },
+                if: {
+                  $eq: ["$review.value", 1]
+                },
                 then: 1,
                 else: 0,
               },
@@ -28,7 +34,9 @@ router.post("/recommend/no-auth", async (req, res) => {
               value: "$review.value",
             },
           },
-          total: { $sum: 1 },
+          total: {
+            $sum: 1
+          },
         },
       },
       {
@@ -37,8 +45,12 @@ router.post("/recommend/no-auth", async (req, res) => {
           count: -1,
         },
       },
-      { $skip: page * docsPerPage },
-      { $limit: docsPerPage },
+      {
+        $skip: page * docsPerPage
+      },
+      {
+        $limit: docsPerPage
+      },
       {
         $project: {
           review: 1,
@@ -51,13 +63,15 @@ router.post("/recommend/no-auth", async (req, res) => {
       results = await Promise.all(
         results.map((r) => {
           return User.findById(r._id).select(
-            "-password -review -friends -sent -received"
+            "-password -friends -sent -received"
           );
         })
       );
     }
 
-    res.status(200).json({ results });
+    res.status(200).json({
+      results
+    });
   } catch (e) {
     console.log(e);
     errorHandler.handleInternalServer(res);
@@ -70,15 +84,19 @@ router.post(
   async (req, res) => {
     try {
       const page = Math.max(0, req.query.page || 0);
-      const docsPerPage = 10;
+      const docsPerPage = 1;
 
       // Sort the users by difference between current karma and user karma
-      const pipe = User.aggregate([
-        {
-          $match: { _id: { $nin: [req.user._id] } },
+      const pipe = User.aggregate([{
+          $match: {
+            _id: {
+              $nin: [req.user._id]
+            }
+          },
         },
         {
           $project: {
+            review: 1,
             karma: 1,
             name: 1,
             username: 1,
@@ -86,7 +104,9 @@ router.post(
             handles: 1,
             avatar: 1,
             diff: {
-              $abs: { $subtract: ["$karma", req.user.karma] },
+              $abs: {
+                $subtract: ["$karma", req.user.karma]
+              },
             },
           },
         },
@@ -95,8 +115,12 @@ router.post(
             diff: 1,
           },
         },
-        { $skip: page * docsPerPage },
-        { $limit: docsPerPage },
+        {
+          $skip: page * docsPerPage
+        },
+        {
+          $limit: docsPerPage
+        },
       ]);
 
       let results = await pipe.exec();
@@ -110,7 +134,9 @@ router.post(
       //   );
       // }
 
-      res.status(200).json({ results });
+      res.status(200).json({
+        results
+      });
     } catch (e) {
       console.log(e);
       errorHandler.handleInternalServer(res);
@@ -121,10 +147,11 @@ router.post(
 //Return the leaderboard
 router.post("/leaderboard/global", async (req, res) => {
   try {
-    const temp = User.aggregate([
-      {
+    const temp = User.aggregate([{
         $setWindowFields: {
-          sortBy: { karma: -1 },
+          sortBy: {
+            karma: -1
+          },
           output: {
             rank: {
               $rank: {},
@@ -141,7 +168,9 @@ router.post("/leaderboard/global", async (req, res) => {
       },
     ]);
     let result = await temp.exec();
-    res.status(200).json({ result });
+    res.status(200).json({
+      result
+    });
   } catch (e) {
     console.log(e);
     errorHandler.handleInternalServer(res);
@@ -154,10 +183,11 @@ router.post(
   authController.isAuthenticated,
   async (req, res) => {
     try {
-      const temp = User.aggregate([
-        {
+      const temp = User.aggregate([{
           $setWindowFields: {
-            sortBy: { karma: -1 },
+            sortBy: {
+              karma: -1
+            },
             output: {
               rank: {
                 $rank: {},
@@ -177,7 +207,9 @@ router.post(
       result = result.filter((user) => {
         return req.user.friends.includes(user._id);
       });
-      res.status(200).json({ result });
+      res.status(200).json({
+        result
+      });
     } catch (e) {
       console.log(e);
       errorHandler.handleInternalServer(res);

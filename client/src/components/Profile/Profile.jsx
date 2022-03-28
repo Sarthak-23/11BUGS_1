@@ -157,7 +157,11 @@ const Profile = () => {
                       md={4}
                       sx={{ display: "flex", justifyContent: "center" }}
                     >
-                      <Avatar sx={{ width: 72, height: 72 }} />
+                      <Avatar
+                        alt="Avatar"
+                        src={`${data.avatar}`}
+                        sx={{ width: 72, height: 72 }}
+                      />
                     </Grid>
                     <Grid item xs={true} alignSelf="center" align="center">
                       <Typography variant="h6">{data.name}</Typography>
