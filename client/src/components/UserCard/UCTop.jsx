@@ -104,6 +104,7 @@ const UCTop = (props) => {
   const theme = useTheme();
   const classes = useStyles();
   const [view, setView] = React.useState("list");
+  console.log(props.data.preVote);
   const [vote, setVote] = React.useState(props.data.preVote || 0);
   const [user, setUser] = React.useContext(UserContext);
   const [error, setError] = useState("");
@@ -118,11 +119,12 @@ const UCTop = (props) => {
     console.log(newVote, vote);
     postVote(newVote)
       .then((res) => {
-        if (vote === "") {
-          setVote(newVote);
-        } else {
-          if (vote !== newVote) setVote(newVote);
-        }
+        // if (vote === "") {
+        //   setVote(newVote);
+        // } else {
+        //   if (vote !== newVote)
+        // }
+        setVote(newVote);
       })
       .catch((e) => {
         console.log(e);
@@ -226,6 +228,7 @@ const UCTop = (props) => {
             <ToggleButton
               onClick={() => handleAlignment(1)}
               value={1}
+              selected={vote === 1}
               // className={[classes.VoteButton, classes.VoteUp]}
             >
               <ThumbUpAltOutlinedIcon color="success" />
@@ -247,6 +250,7 @@ const UCTop = (props) => {
             <ToggleButton
               onClick={() => handleAlignment(-1)}
               value={-1}
+              selected={vote === -1}
               // className={[classes.VoteButton, classes.VoteDown]}
             >
               <ThumbDownOutlinedIcon

@@ -95,11 +95,12 @@ const UserCard = (props) => {
   const [error, setError] = useState("");
   const [counter, setCounter] = useState(0);
   const [user, setUser] = React.useContext(UserContext);
+  const [prevId, setPrevId] = useState([]);
   const [end, setEnd] = useState({
     title: "",
     description: "",
   });
-  const [preVote, setPreVote] = useState("");
+  const [preVote, setPreVote] = useState(0);
 
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -109,7 +110,9 @@ const UserCard = (props) => {
     try {
       setError("");
       setLoading(true);
-      let res = await axios.post(`/recommend/no-auth?page=${counter}`);
+      let res = await axios.post(`/recommend/?page=${counter}`, {
+        user: user._id,
+      });
       setLoading(false);
       console.log(res.data.results[0]);
       return res.data.results[0];
@@ -120,34 +123,25 @@ const UserCard = (props) => {
     }
   };
 
-  const fetchUserProfileById = async (id) => {
-    ////////////////////
-    try {
-      setError("");
-      setLoading(true);
-      let res = await axios.post(`/profile/${id}`);
-      setLoading(false);
-      console.log(res);
-      return res.data.user;
-    } catch (e) {
-      console.log(e);
-      setError(e.message || "Something went wrong!");
-      setLoading(false);
-    }
-  };
-
   React.useEffect(() => {
     fetchUserProfile()
       .then((res) => {
-        console.log(res);
-        if (res === undefined) {
+        if (!res) {
           setEnd({
             title: "No more user exists",
             description:
               "You have scrolled through all available users in the list.",
           });
-          handleOpen();
-        } else setData(res);
+          // handleOpen();
+        } else {
+          // setPrevId((prev) => {
+          //   return [...prev, res._id];
+          // });
+          setData(res);
+          const temp = res.review.find((r) => r.user === user._id);
+          console.log(temp.value);
+          setPreVote(temp.value);
+        }
       })
       .catch((e) => {
         console.log(e);
@@ -155,25 +149,10 @@ const UserCard = (props) => {
       });
   }, [counter]);
 
-  React.useEffect(() => {
-    console.log(data._id);
-    if (data._id && user._id) {
-      fetchUserProfileById(data._id)
-        .then((res) => {
-          console.log(res.review);
-          res.review.forEach((ele) => {
-            if (ele.user === user._id) {
-              setPreVote(ele.value);
-              console.log(ele.value);
-            }
-          });
-        })
-        .catch((e) => {
-          console.log(e);
-          setError(e.message || "Something went wrong!");
-        });
+  useEffect(() => {
+    if (user._id) {
     }
-  }, [data._id]);
+  }, [data]);
 
   const handlePageChange = () => {
     setCounter((prev) => {

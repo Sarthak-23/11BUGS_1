@@ -3,13 +3,49 @@ const authController = require("../controller/authController");
 const errorHandler = require("../handler/error");
 const User = require("../models/User");
 
+router.post("/recommend", async (req, res) => {
+  try {
+    const page = Math.max(0, req.query.page || 0);
+    const docsPerPage = 1;
+
+    // Sort the users by their peer reviews
+
+    const results = await User.find({
+      _id: {
+        $nin: [
+          req.body.user
+        ]
+      }
+    }).sort({
+      "karma": -1
+    }).skip(docsPerPage*page).limit(docsPerPage).select(
+      "-password -friends -sent -received"
+    )
+    res.status(200).json({
+      results
+    });
+  } catch (e) {
+    console.log(e);
+    errorHandler.handleInternalServer(res);
+  }
+});
+
+
 router.post("/recommend/no-auth", async (req, res) => {
   try {
     const page = Math.max(0, req.query.page || 0);
     const docsPerPage = 1;
 
     // Sort the users by their peer reviews
+    
     const pipe = User.aggregate([{
+      $match: {
+        _id: {
+          $nin: [req.body.user]
+        }
+      },
+    }, {
+        
         $unwind: {
           path: "$review",
           preserveNullAndEmptyArrays: true
@@ -90,7 +126,7 @@ router.post(
       const pipe = User.aggregate([{
           $match: {
             _id: {
-              $nin: [req.user._id]
+              $nin: [req.user._id, ...req.body.prev]
             }
           },
         },
