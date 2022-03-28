@@ -247,6 +247,7 @@ const Profile = () => {
                           key={i}
                           user={f}
                           type="friend"
+                          data={data}
                           changeMount={changeMount}
                         />
                       ))
@@ -263,6 +264,7 @@ const Profile = () => {
                           <UserCard
                             key={i}
                             user={f}
+                            data={data}
                             type="pending"
                             changeMount={changeMount}
                           />
@@ -281,6 +283,7 @@ const Profile = () => {
                           <UserCard
                             key={i}
                             user={f}
+                            data={data}
                             type="request"
                             changeMount={changeMount}
                           />
