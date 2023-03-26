@@ -87,7 +87,6 @@ const Profile = () => {
       return res.data.user;
     } catch (e) {
       setLoading(false);
-      console.log(e);
       setError(e.message || "Something went wrong!");
     }
   };
@@ -135,7 +134,6 @@ const Profile = () => {
         setData({ ...res });
       })
       .catch((e) => {
-        console.log(e);
         setError(e.message || "Something went wrong!");
       });
   }, [params.id, mount]);

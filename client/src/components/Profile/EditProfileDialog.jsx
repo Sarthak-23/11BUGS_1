@@ -24,7 +24,6 @@ const EditProfileDialog = (props) => {
 
   const save = async () => {
     try {
-      //   console.log(value);
       const res = await axios.patch("/profile", {
         name: data.name,
         email: data.email,
@@ -43,7 +42,6 @@ const EditProfileDialog = (props) => {
 
   const handleClick = () => {
     imgInput.current.click();
-    // console.log(imgInput.current.value, imgInput.current.files);
     // imgInput.current.
   };
 
